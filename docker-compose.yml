@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app:
+    build: ./app
+    container_name: app
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - 5001:80
+    environment:
+      POSTGRES_USER: fatec
+      POSTGRES_PASSWORD: fatec
+      POSTGRES_DB: pi
+  
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+    - 5431:5432
+    environment:
+      POSTGRES_USER: fatec
+      POSTGRES_PASSWORD: fatec
+      POSTGRES_DB: pi
