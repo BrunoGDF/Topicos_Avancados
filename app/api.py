@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_restful import Resource, Api
 from getGenders import getGenders
-from sqlalchemy import create_engine  
+from sqlalchemy import create_engine
 from sqlalchemy import Column, String, Integer
-from sqlalchemy.ext.declarative import declarative_base  
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 #Model
@@ -21,20 +21,20 @@ grupos = ['Grupo 1','Grupo 2','Grupo 3']
 class setDadosIniciais(Resource):
     def get(self):
         db_string = "postgres://fatec:fatec@postgres:5432/pi"
-        db = create_engine(db_string)  
+        db = create_engine(db_string)
         base = declarative_base()
 
         class Genero(base):
             __tablename__ = 'Genero'
             id = Column(Integer, primary_key=True)
             tipo = Column(String)
-        
+
         class Usuario(base):
             __tablename__ = 'Usuario'
             id = Column(Integer, primary_key=True)
             desc = Column(String)
 
-        Session = sessionmaker(db)  
+        Session = sessionmaker(db)
         session = Session()
         base.metadata.create_all(db)
 
@@ -54,34 +54,34 @@ class setDadosIniciais(Resource):
 class setGenero(Resource):
     def get(self,usuario, genero):
         db_string = "postgres://fatec:fatec@postgres:5432/pi"
-        db = create_engine(db_string)  
+        db = create_engine(db_string)
         base = declarative_base()
 
         class Genero(base):
             __tablename__ = 'Genero'
             id = Column(Integer, primary_key=True)
             tipo = Column(String)
-        
+
         class UsuarioGenero(base):
             __tablename__ = 'UsuarioGenero'
             id_usuario = Column(Integer, primary_key=True)
             id_genero = Column(Integer, primary_key=True)
 
-        Session = sessionmaker(db)  
+        Session = sessionmaker(db)
         session = Session()
         base.metadata.create_all(db)
 
         # Read
         genero_id = 0
-        generos_banco = session.query(Genero)  
-        for g in generos_banco:  
+        generos_banco = session.query(Genero)
+        for g in generos_banco:
             if(g.tipo==genero):
                 genero_id = g.id
                 break
 
-        # Create 
-        usuario_genero = UsuarioGenero(id_usuario=usuario, id_genero=genero_id)  
-        session.add(usuario_genero)  
+        # Create
+        usuario_genero = UsuarioGenero(id_usuario=usuario, id_genero=genero_id)
+        session.add(usuario_genero)
         session.commit()
         return {
             'Msg': 'Genero '+genero+' cadastrado para o usuario '+usuario+'.'
@@ -90,9 +90,14 @@ class setGenero(Resource):
 #        genders = getGenders(test)
 #        return genders
 
+class getFilm(Resource):
+    def get(self):
+        return { "filme": 'Vingadores Ultimato' }
+
 #api.add_resource(Test, '/')
 api.add_resource(setGenero, '/setGenero/<string:usuario>/<string:genero>')
 api.add_resource(setDadosIniciais, '/dadosIniciais')
+api.add_resource(getFilm, '/getFilm')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
