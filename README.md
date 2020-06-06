@@ -1,5 +1,5 @@
 ## Tópicos Avançados em Banco de Dados
 
-**AVISO: Esta é a versão obsoleta, segue abaixo nova url para o repositório.**
+**AVISO: Esta é a versão obsoleta, segue abaixo url para o novo repositório.**
 
 https://github.com/Gil-cos/Topicos_Avancados
